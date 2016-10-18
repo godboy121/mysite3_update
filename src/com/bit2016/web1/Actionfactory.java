@@ -1,0 +1,11 @@
+package com.bit2016.web1;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public abstract class Actionfactory {
+	public abstract Action getAction(String actionName);
+}
