@@ -26,7 +26,11 @@ public class UserActionFactory extends Actionfactory {
 			action = new ModifyFormAction();
 		} else if( "modify".equals( actionName ) ){
 			action = new ModifyAction();
-		} else {
+		}
+		else if( "checkemail".equals( actionName ) ){
+			action = new APICheckEmailAction();
+		}
+		else {
 			action = new MainAction();
 		}
 		

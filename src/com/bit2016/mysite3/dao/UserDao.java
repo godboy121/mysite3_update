@@ -108,6 +108,47 @@ public class UserDao {
 		
 		return vo;
 	}
+	
+	public UserVo get(String email){
+		UserVo vo=null;
+		Connection conn=null;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		try {
+			conn=getConnection();
+			
+			String sql="select no, email,name from users where email=?";
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setString(1, email);
+			
+			
+			rs=pstmt.executeQuery();
+			if(rs.next()){
+				vo=new UserVo();
+				vo.setNo(rs.getInt(1));
+				vo.setEmail(rs.getString(2));
+				vo.setName(rs.getString(3));
+				
+			
+			}
+		} catch (SQLException e) {
+			System.out.println("error"+e);
+		}finally{
+			try{
+				if(conn!=null)
+					conn.close();
+				if(pstmt!=null)
+					pstmt.close();
+				if(rs!=null)
+					rs.close();
+			}catch(SQLException e)
+			{
+				System.out.println("error"+e);
+			}
+		}
+		
+		return vo;
+	}
 	public UserVo update(UserVo vo){
 		Connection conn=null;
 		PreparedStatement pstmt=null;
@@ -145,7 +186,7 @@ public class UserDao {
 		PreparedStatement pstmt=null;
 		try {
 			conn=getConnection();
-			String sql="insert into users values(users_seq.nextval,?,?,?,?)";
+			String sql="insert into users values(user_seq.nextval,?,?,?,?)";
 			pstmt=conn.prepareStatement(sql);
 			
 			pstmt.setString(1, vo.getName());

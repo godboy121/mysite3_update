@@ -16,7 +16,7 @@ import com.bit2016.web1.Actionfactory;
  * Servlet implementation class userservelt
  */
 @WebServlet("/user")
-public class userservelt extends HttpServlet {
+public class userservlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	

@@ -129,5 +129,65 @@ public class GuestBookDao {
 		return list;
 	}
 	
+	
+	public List<GuestBookVo> getList(int page){
+		List<GuestBookVo> list=new ArrayList<GuestBookVo>();
+		Connection conn=null;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		
+		try{
+			conn=getConnection();
+			
+			String sql="select *"+
+					"from(select rownum rn,a.*"+
+							"from(select no,"+
+								   "name,"+ 
+								   "context,"+ 
+								   "passwd, "+
+								   "to_char(reg_date,'yyyy-mm-dd hh:mi:ss') as reg_date "+
+								   "from guestbook "+
+								   "order by no desc) a)"+
+								   "where (?-1)*5+1<=rn and rn<=?*5";
+			pstmt=conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, page);
+			pstmt.setInt(2, page);
+			
+			rs=pstmt.executeQuery();
+			while(rs.next()){
+				int no=rs.getInt(1);
+				String name=rs.getString(2);
+				String context=rs.getString(3);
+				String passwd=rs.getString(4);
+				String regDate=rs.getString(5);
+				
+				GuestBookVo vo=new GuestBookVo();
+				vo.setNo(no);
+				vo.setName(name);
+				vo.setContext(context);
+				vo.setPasswd(passwd);
+				vo.setRegDate(regDate);
+				
+				list.add(vo);
+			}
+		}catch(SQLException e){
+			System.out.println("error"+e);
+		}finally{
+			try{
+				if(conn!=null)
+					conn.close();
+				if(pstmt!=null)
+					pstmt.close();
+				if(rs!=null)
+					rs.close();
+			}catch(SQLException e)
+			{
+				System.out.println("error"+e);
+			}
+		}
+		return list;
+	}
+	
 
 }
